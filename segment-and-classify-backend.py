@@ -24,7 +24,13 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = models.resnet18(pretrained=False)
 num_classes = 101  
 model.fc = nn.Linear(model.fc.in_features, num_classes)
-model.load_state_dict(torch.load("best_model.pth"))
+
+script_dir = os.path.dirname(__file__)
+checkpoint_path = os.path.join(script_dir, "checkpoints", "best_model.pth")
+checkpoint = torch.load(checkpoint_path)
+#checkpoint = torch.load("/Users/justinjasper/Documents/GitHub/meal-calorie-predictor/checkpoints/best_model.pth")
+#checkpoint = torch.load("checkpoints/best_model.pth")
+model.load_state_dict(checkpoint['model_state_dict'])
 model = model.to(device)
 model.eval()
 
