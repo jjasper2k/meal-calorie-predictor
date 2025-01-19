@@ -1,3 +1,4 @@
 *.jpg filter=lfs diff=lfs merge=lfs -text
 resnet152_food21_best.pt filter=lfs diff=lfs merge=lfs -text
 best-model.pt filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
