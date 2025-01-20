@@ -1,12 +1,32 @@
-# meal-calorie-predictor
-The goal of this program is to analyze the nutritional value of a meal based on a photo.
+# Project: Food Image Analysis for Nutritional Estimation
+The goal of this program is to analyze the nutritional value of a meal based on a photo. By leveraging computer vision models, the program can classify food, segment it by type, and estimate nutritional components, including calorie count, carbs, proteins, fats, vitamins, and minerals.
 
-The program inputs a user photo of a plate of foode, analyzes the specific content of the plate, and estimates the calorie count and nutritional value (carbs, proteins, fats, vitamins, minerals) of the meal.
+# Features
+- V1: Classifying Food from Photo
+Classifies the food in the image into one of 101 predefined categories.
 
-V1: Classifying Food from Photo
+- V2: Segmenting Food Images (Future Direction)
+Segments the image by types of food, then classifies each segment to provide more granular insights.
 
-V2: Segmenting food images by type of food, then classifying each type
+- V3: Portion Approximation & Nutrient Calculation (Future Direction)
+Estimates the portion size of each food type in the image and calculates the nutritional contents, including calories, carbs, proteins, fats, vitamins, and minerals.
 
-V3: Portion Approximation of each food, calculation of nutrient contents
+# Files Overview
+- foodimage-classification_training.ipynb:
+A Jupyter notebook used to train the computer vision classification model for 101 different food types/classes.
+
+- classify-image-backend.py:
+The backend script for an HTML interface that allows users to upload a food image. The program returns a classification label for the food type.
+Associated Frontend: templates/classify-index.html
+
+- segment-and-classify-backend.py:
+The backend script for an HTML interface where users can upload an image. The program segments the image by different food types and classifies each segment.
+Associated Frontend: templates/segment-and-classify-index.html
+
+- segment-and-classify.ipynb:
+A Jupyter notebook used for segmenting food images into different types and returning the classification labels for each segment.
+
+- Checkpoints Folder:
+Contains the .pth files that were generated during the training process. These are the saved model states used for inference.
 
 
