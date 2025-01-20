@@ -28,8 +28,6 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 script_dir = os.path.dirname(__file__)
 checkpoint_path = os.path.join(script_dir, "checkpoints", "best_model.pth")
 checkpoint = torch.load(checkpoint_path)
-#checkpoint = torch.load("/Users/justinjasper/Documents/GitHub/meal-calorie-predictor/checkpoints/best_model.pth")
-#checkpoint = torch.load("checkpoints/best_model.pth")
 model.load_state_dict(checkpoint['model_state_dict'])
 model = model.to(device)
 model.eval()
@@ -39,6 +37,14 @@ seg_model = models.segmentation.deeplabv3_resnet101(pretrained=True)
 seg_model = seg_model.to(device)
 seg_model.eval()
 
+# Load class labels from labels.txt
+def load_class_labels(labels_file):
+    with open(labels_file, 'r') as f:
+        return [line.strip() for line in f.readlines()]
+
+# Path to the labels file
+labels_file = os.path.join(script_dir, "food-101", "food-101", "meta", "labels.txt")
+class_labels = load_class_labels(labels_file)
 
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
@@ -88,7 +94,9 @@ def segment_and_classify(image_path):
             output = model(cropped_img_tensor)
             _, predicted_class = torch.max(output, 1)
 
-        class_label = "Food Class " + str(predicted_class.item())
+        # Map predicted class index to class label
+        class_label = class_labels[predicted_class.item()]
+
         segment_area = len(y)  # Pixel count for the segment
         results.append({
             'food_type': class_label,
@@ -133,9 +141,9 @@ def index():
             img_stream.seek(0)
             img_b64 = base64.b64encode(img_stream.getvalue()).decode('utf-8')
 
-            return render_template('index.html', image_data=img_b64, results=results)
+            return render_template('segment-and-classify-index.html', image_data=img_b64, results=results)
 
-    return render_template('index.html')
+    return render_template('segment-and-classify-index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
