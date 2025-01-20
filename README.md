@@ -2,13 +2,13 @@
 The goal of this program is to analyze the nutritional value of a meal based on a photo. By leveraging computer vision models, the program can classify food, segment it by type, and estimate nutritional components, including calorie count, carbs, proteins, fats, vitamins, and minerals.
 
 # Features
-- V1 (Current): Classifying Food from Photo
+- V1 (Current): Classifying Food from Photo - 
 Classifies the food in the image into one of 101 predefined categories.
 
-- V2 (Future Direction): Segmenting Food Images 
+- V2 (Future Direction): Segmenting Food Images -
 Segments the image by types of food, then classifies each segment to provide more granular insights.
 
-- V3 (Future Direction): Portion Approximation & Nutrient Calculation 
+- V3 (Future Direction): Portion Approximation & Nutrient Calculation -
 Estimates the portion size of each food type in the image and calculates the nutritional contents, including calories, carbs, proteins, fats, vitamins, and minerals.
 
 # Files Overview
