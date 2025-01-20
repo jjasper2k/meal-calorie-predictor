@@ -1,2 +1,10 @@
 
 .DS_Store
+*.jpg
+food-101/license_agreement.txt
+food-101/meta/classes.txt
+food-101/meta/test.json
+food-101/meta/train.json
+food-101/meta/train.txt
+food-101/README.txt
+food-101/meta/test.txt
