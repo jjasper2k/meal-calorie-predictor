@@ -3,6 +3,8 @@
 
 The goal of this program is to analyze the nutritional value of a meal based on a photo. By leveraging computer vision models, the program can classify food, segment it by type, and estimate nutritional components, including calorie count, carbs, proteins, fats, vitamins, and minerals.
 
+The food classification model leveraged a ResNet18 model trained using the Food 101 image dataset on Kaggle. The Yolov5s model from Ultralytics was used for object detection.
+
 # Features
 - V1: Classifying Food from Photo - 
 Classifies the food in the image into one of 101 predefined categories.
