@@ -9,16 +9,15 @@ from io import BytesIO
 import base64
 import os
 
-# Initialize Flask app
 app = Flask(__name__)
 
-# Load YOLO model for object detection
-yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # Use YOLOv5 small model
+# Load YOLOv5s model for object detection
+yolo_model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  
 
 # Load trained ResNet-18 model for classification
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = models.resnet18(pretrained=False)
-num_classes = 101  # Adjust the number of classes if needed
+num_classes = 101  
 model.fc = nn.Linear(model.fc.in_features, num_classes)
 
 # Load model checkpoint
@@ -29,12 +28,10 @@ model.load_state_dict(checkpoint['model_state_dict'])
 model = model.to(device)
 model.eval()
 
-# Load class labels from labels.txt
 def load_class_labels(labels_file):
     with open(labels_file, 'r') as f:
         return [line.strip() for line in f.readlines()]
 
-# Path to the labels file
 labels_file = os.path.join(script_dir, "food-101", "meta", "labels.txt")
 class_labels = load_class_labels(labels_file)
 
@@ -46,9 +43,8 @@ transform = transforms.Compose([
 ])
 
 
-# Function to classify the cropped image (e.g., for "bowl" objects)
+# Function to classify the cropped image 
 def classify_image(cropped_image):
-    # Ensure the cropped image is in RGB mode
     cropped_image = cropped_image.convert("RGB")
     cropped_image = cropped_image.resize((224, 224))
     input_tensor = transform(cropped_image).unsqueeze(0).to(device)
@@ -60,19 +56,17 @@ def classify_image(cropped_image):
     predicted_class_label = class_labels[predicted_class.item()]
     return predicted_class_label
 
-# Function to perform object detection and classify "bowl" objects
+# Function to perform object detection and classify food objects
 def detect_and_classify(file):
     try:
-        # Load the image
         image = Image.open(file).convert("RGB")
         img_array = np.array(image)  # Convert to numpy array for YOLO
 
         # Perform object detection with YOLO
         results = yolo_model(img_array)
 
-        # Extract detection results
-        detected_items = results.xyxy[0].numpy()  # Bounding box coordinates and confidence
-        labels = results.names  # Class labels
+        detected_items = results.xyxy[0].numpy()  
+        labels = results.names  
 
         draw = ImageDraw.Draw(image)
         font = ImageFont.load_default()
@@ -88,7 +82,6 @@ def detect_and_classify(file):
                 classification_label = classify_image(cropped)
                 print("image classified")
 
-                # Draw bounding box and display classification result
                 draw.rectangle([(xmin, ymin), (xmax, ymax)], outline="red", width=3)
                 draw.text((xmin, ymin), f"{label}: {classification_label}", fill="black", font=font)
                 print("box drawn")
@@ -122,7 +115,6 @@ def index():
         if file.filename == '':
             return redirect(request.url)
 
-        # Detect objects and classify "bowl" objects
         img_b64 = detect_and_classify(file)
 
         return render_template('detect-classify-index.html', image_data=img_b64)
