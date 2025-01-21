@@ -50,20 +50,16 @@ transform = transforms.Compose([
 def classify_image(cropped_image):
     # Ensure the cropped image is in RGB mode
     cropped_image = cropped_image.convert("RGB")
-    
-    # Resize the cropped image to (224, 224) for the model input
     cropped_image = cropped_image.resize((224, 224))
-
-    # Apply the preprocessing transform
     input_tensor = transform(cropped_image).unsqueeze(0).to(device)
 
     with torch.no_grad():
         output = model(input_tensor)
         _, predicted_class = torch.max(output, 1)
 
-    # Map the predicted class index to the class label
     predicted_class_label = class_labels[predicted_class.item()]
     return predicted_class_label
+
 # Function to perform object detection and classify "bowl" objects
 def detect_and_classify(file):
     try:
@@ -78,15 +74,13 @@ def detect_and_classify(file):
         detected_items = results.xyxy[0].numpy()  # Bounding box coordinates and confidence
         labels = results.names  # Class labels
 
-        # Draw bounding boxes and classify "bowl" objects
         draw = ImageDraw.Draw(image)
         font = ImageFont.load_default()
         for item in detected_items:
             xmin, ymin, xmax, ymax, confidence, class_id = item
             label = labels[int(class_id)]
 
-            if label == "bowl":  # Check for bowl label
-                # Crop the detected region (the "bowl" object)
+            if label == "bowl":  
                 print("bowl found")
                 cropped = image.crop((xmin, ymin, xmax, ymax))
                 
@@ -101,7 +95,7 @@ def detect_and_classify(file):
             else:
                 label = f"{labels[int(class_id)]} ({confidence:.2f})"
                 draw.rectangle([(xmin, ymin), (xmax, ymax)], outline="red", width=3)
-                draw.text((xmin, ymin), label, fill="red", font=font)
+                draw.text((xmin, ymin), label, fill="black", font=font)
 
         # Convert the modified image to base64 for display
         img_stream = BytesIO()
@@ -109,9 +103,8 @@ def detect_and_classify(file):
         img_stream.seek(0)
         img_b64 = base64.b64encode(img_stream.getvalue()).decode('utf-8')
 
-        image.save('output_image.png')
-        simple_image = Image.new("RGB", (100, 100), "white")
-        simple_image.save('simple_image.png')
+        #image.save('output_image.png')
+        
 
         return img_b64
 
