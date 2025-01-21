@@ -20,20 +20,9 @@ Estimates the portion size of each food type in the image and calculates the nut
 - foodimage-classification_training.ipynb:
 A Jupyter notebook used to train the computer vision classification model for 101 different food types/classes. The food classification model leveraged a ResNet18 model trained using the Food 101 image dataset on Kaggle.
 
-- classify-image-backend.py:
-The backend script for an HTML interface that allows users to upload a food image. The program returns a classification label for the food type.
-Associated Frontend file: templates/classify-index.html
-
-- object-detection-backend.py:
-The backend script for an HTML interface where users can upload an image. The program identifies the major objects in the image using YOLOv5s from Ultralytics.
-
-
 - detect-and-classify-backend.py:
 The backend script for an HTML interface where users can upload an image. The program identies the major objects in the image, and further classifies any food object according to the classification model.
 Associated Frontend file : templates/detect-and-classify-index.html
-
-- segment-and-classify.ipynb:
-A Jupyter notebook used for segmenting food images into different types and returning the classification labels for each segment.
 
 - Checkpoints Folder:
 Contains the .pth files that were generated during the training process. These are the saved model states used for inference.
