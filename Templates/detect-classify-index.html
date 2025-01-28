@@ -25,6 +25,22 @@
             max-width: 100%;
             height: auto;
         }
+        .labels-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .labels-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .labels-container ul li {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -45,6 +61,17 @@
                 <img src="data:image/png;base64,{{ image_data }}" alt="Detected Image" class="img-fluid">
             </div>
         {% endif %}
+
+        {% if food_labels %}
+            <div class="labels-container">
+                <h3>Detected Food Labels:</h3>
+                <ul>
+                    {% for label in food_labels %}
+                        <li>{{ label }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </div>
 
     <!-- Bootstrap JS (Optional for interactivity) -->
@@ -53,4 +80,3 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
