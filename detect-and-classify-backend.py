@@ -70,6 +70,8 @@ def detect_and_classify(file):
 
         draw = ImageDraw.Draw(image)
         font = ImageFont.load_default()
+        food_labels = []
+
         for item in detected_items:
             xmin, ymin, xmax, ymax, confidence, class_id = item
             label = labels[int(class_id)]
@@ -81,11 +83,14 @@ def detect_and_classify(file):
                 # Classify the cropped region
                 classification_label = classify_image(cropped)
                 print("image classified")
+                food_labels.append(classification_label)
 
                 draw.rectangle([(xmin, ymin), (xmax, ymax)], outline="red", width=3)
                 draw.text((xmin, ymin), f"{label}: {classification_label}", fill="black", font=font)
                 print("box drawn")
             else:
+                if label not in ["knife", "bottle", "spoon", "fork", "dining table"]:
+                    food_labels.append(label)
                 label = f"{labels[int(class_id)]} ({confidence:.2f})"
                 draw.rectangle([(xmin, ymin), (xmax, ymax)], outline="red", width=3)
                 draw.text((xmin, ymin), label, fill="black", font=font)
@@ -99,7 +104,7 @@ def detect_and_classify(file):
         #image.save('output_image.png')
         
 
-        return img_b64
+        return img_b64, food_labels
 
     except Exception as e:
         return f"Error processing the image: {str(e)}"
@@ -115,11 +120,12 @@ def index():
         if file.filename == '':
             return redirect(request.url)
 
-        img_b64 = detect_and_classify(file)
+        img_b64, food_labels = detect_and_classify(file)  # Correctly unpack both values
 
-        return render_template('detect-classify-index.html', image_data=img_b64)
+        return render_template('detect-classify-index.html', image_data=img_b64, food_labels=food_labels)
 
     return render_template('detect-classify-index.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
